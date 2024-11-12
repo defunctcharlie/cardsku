@@ -12,8 +12,8 @@ ExcelApp = win32com.client.GetActiveObject("Excel.Application")
 
 
 cost = df['Cost per Item']
+name = df['Name']
 SKU = df['Barcode']
-
 
 alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
 		 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -22,8 +22,9 @@ sku_random = ''
 cost_break = []
 cost_output = ''
 cost_input = str(cost)
+name_input = name
 print(cost)
-def generate(cost_input):
+def generate(cost_input, name_input):
 	part_1 = ''
 	part_2 = ''
 	part_3 = ''
@@ -71,16 +72,28 @@ def generate(cost_input):
 				i = "I"
 			elif i == 9:
 				i = "J"
-		i = str(i)
+		i = str(i)	
 		part_3 += i
 
-	sku_random = part_1 + "-" + part_2 + "-" + part_3 
+
+	if "PSA" in name_input:
+		part_4 = 'G'
+	elif "BGS" in name_input:
+		part_4 = 'G'
+	else:
+		part_4 = 'R'
+
+	
+
+	sku_random = part_1 + "-" + part_2 + "-" + part_3 + "-" + part_4
 	return sku_random
 
 count = 2
+name_count = 0
 for i in cost:
 	i = int(i)
-	print(i)
 	cell = 'I'
-	ExcelApp.Range(cell + str(count)).Value = generate(str(i))
+	ExcelApp.Range(cell + str(count)).Value = generate(str(i), name[name_count])
 	count += 1
+	name_count += 1
+
