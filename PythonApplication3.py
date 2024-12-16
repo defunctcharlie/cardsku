@@ -16,6 +16,7 @@ cost = df['Cost per Item']
 name = df['Name']
 SKU = df['Barcode']
 sport = df['Sport']
+handle = df['Handle']
 
 alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
 		 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -99,7 +100,7 @@ def generate(cost_input, name_input, sport_input):
 				i = "J"
 		i = str(i)	
 		part_4 += i
-
+	#Add random combination of numbers/letters at end of key
 	for i in alpha:
 		rand_key = False
 		if randint(0,100) >= 92	:
@@ -113,12 +114,19 @@ def generate(cost_input, name_input, sport_input):
 	return sku_random
 
 count = 2
+erase_count = 1
 name_count = 0
+for i in range(500):
+	erase_count += 1
+	cell_2 = 'N'
+	ExcelApp.Range(cell_2 + str(erase_count)).value = ""
 for i in cost:
-	i =		int(i)
+	i =	int(i)
 	cell = 'I'
 	cell_2 = 'N'
+	#Concatenate I cell for barcode/SKU value
 	ExcelApp.Range(cell + str(count)).Value = generate(str(i), name[name_count], sport[name_count])
+	#Concatenate handle in cell 'N' for differentiation in Shopify
 	ExcelApp.Range(cell_2 + str(count)).Value = generate(str(i), name[name_count], sport[name_count])
 	count += 1
 	name_count += 1
