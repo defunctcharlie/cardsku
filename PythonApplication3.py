@@ -7,7 +7,7 @@ import os
 import win32com.client
 os.chdir(sys.path[0])
 
-df = pd.read_excel('sku_builder.xlsm')
+df = pd.read_excel('test.xlsm')
 
 ExcelApp = win32com.client.GetActiveObject("Excel.Application")
 
@@ -16,7 +16,7 @@ cost = df['Cost per Item']
 name = df['Name']
 SKU = df['Barcode']
 sport = df['Sport']
-handle = df['Handle']
+SKU_real = df['SKU']
 
 alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
 		 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -27,7 +27,7 @@ cost_output = ''
 cost_input = str(cost)
 name_input = name
 sport_input = sport
-print(cost)
+print(sport_input)
 def generate(cost_input, name_input, sport_input):
 	part_1 = ''
 	part_2 = ''
@@ -56,6 +56,12 @@ def generate(cost_input, name_input, sport_input):
 		part_2 = "H"
 	elif "Soccer" in sport_input:
 		part_2 = "S"
+	elif "Wrestling" in sport_input:
+		part_2 = "W"
+	elif "Misc" in sport_input:
+		part_2 = "M"
+	else:
+		part_2 = "M"
 
 	cost_break = []
 
@@ -100,7 +106,7 @@ def generate(cost_input, name_input, sport_input):
 				i = "J"
 		i = str(i)	
 		part_4 += i
-	#Add random combination of numbers/letters at end of key
+
 	for i in alpha:
 		rand_key = False
 		if randint(0,100) >= 92	:
@@ -119,15 +125,17 @@ name_count = 0
 for i in range(500):
 	erase_count += 1
 	cell_2 = 'N'
+	cell_3 = 'O'
 	ExcelApp.Range(cell_2 + str(erase_count)).value = ""
+	ExcelApp.Range(cell_3 + str(erase_count)).value = ""
 for i in cost:
-	i =	int(i)
+	i =		int(i)
 	cell = 'I'
 	cell_2 = 'N'
-	#Concatenate I cell for barcode/SKU value
+	cell_3 = 'O'
 	ExcelApp.Range(cell + str(count)).Value = generate(str(i), name[name_count], sport[name_count])
-	#Concatenate handle in cell 'N' for differentiation in Shopify
 	ExcelApp.Range(cell_2 + str(count)).Value = generate(str(i), name[name_count], sport[name_count])
+	ExcelApp.Range(cell_3 + str(count)).Value = ExcelApp.Range(cell + str(count)).Value
 	count += 1
 	name_count += 1
 
